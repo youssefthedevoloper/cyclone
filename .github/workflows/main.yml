@@ -21,6 +21,11 @@ jobs:
           java-version: "17"
 
       - name: Setup Flutter
+        # If this still fails to resolve 3.44.6 (very recently released),
+        # it likely means the pinned flutter-action version's internal
+        # manifest hasn't been updated yet. Fallback: remove flutter-version
+        # and use `channel: "stable"` instead, or try a channel like
+        # `channel: "stable"` combined with no explicit flutter-version.
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.44.6"
