@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:go_router/go_router.dart';
 
 import 'package:cyclone/core/theme/app_colors.dart';
@@ -10,10 +11,23 @@ class MainShell extends StatelessWidget {
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
+
+    // 0 Home, 1 My Flight, 2 Airport Map, 3 Services, 4 Profile
     if (location.startsWith('/home')) return 0;
     if (location.startsWith('/flights')) return 1;
     if (location.startsWith('/airport')) return 2;
-    if (location.startsWith('/profile')) return 3;
+    if (location.startsWith('/services') ||
+        location.startsWith('/assistant') ||
+        location.startsWith('/translator') ||
+        location.startsWith('/lost-and-found') ||
+        location.startsWith('/notifications') ||
+        location.startsWith('/accessibility') ||
+        location.startsWith('/airport-support') ||
+        location.startsWith('/promotions')) {
+      return 3;
+    }
+    if (location.startsWith('/profile')) return 4;
+
     return 0;
   }
 
@@ -21,14 +35,22 @@ class MainShell extends StatelessWidget {
     switch (index) {
       case 0:
         context.go('/home');
+        break;
       case 1:
         context.go('/flights');
+        break;
       case 2:
         context.go('/airport/map');
+        break;
       case 3:
+        context.go('/services');
+        break;
+      case 4:
         context.go('/profile');
+        break;
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,23 +83,30 @@ class MainShell extends StatelessWidget {
                 _NavItem(
                   icon: Icons.flight_outlined,
                   activeIcon: Icons.flight,
-                  label: 'Flights',
+                  label: 'My Flight',
                   isActive: _currentIndex(context) == 1,
                   onTap: () => _onTap(context, 1),
                 ),
                 _NavItem(
                   icon: Icons.map_outlined,
                   activeIcon: Icons.map,
-                  label: 'Map',
+                  label: 'Airport Map',
                   isActive: _currentIndex(context) == 2,
                   onTap: () => _onTap(context, 2),
+                ),
+                _NavItem(
+                  icon: Icons.grid_view_outlined,
+                  activeIcon: Icons.grid_view,
+                  label: 'Services',
+                  isActive: _currentIndex(context) == 3,
+                  onTap: () => _onTap(context, 3),
                 ),
                 _NavItem(
                   icon: Icons.person_outline,
                   activeIcon: Icons.person,
                   label: 'Profile',
-                  isActive: _currentIndex(context) == 3,
-                  onTap: () => _onTap(context, 3),
+                  isActive: _currentIndex(context) == 4,
+                  onTap: () => _onTap(context, 4),
                 ),
               ],
             ),

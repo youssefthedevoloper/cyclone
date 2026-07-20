@@ -16,6 +16,16 @@ import 'package:cyclone/features/navigation/presentation/widgets/main_shell.dart
 import 'package:cyclone/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:cyclone/features/profile/presentation/screens/profile_screen.dart';
 import 'package:cyclone/features/settings/presentation/screens/settings_screen.dart';
+import 'package:cyclone/features/services/presentation/screens/services_screen.dart';
+
+import 'package:cyclone/features/assistant/presentation/screens/ai_assistant_screen.dart';
+
+import 'package:cyclone/features/translator/presentation/screens/translator_screen.dart';
+import 'package:cyclone/features/lost_found/presentation/screens/lost_and_found_screen.dart';
+import 'package:cyclone/features/promotions/presentation/screens/promotions_screen.dart';
+import 'package:cyclone/features/accessibility/presentation/screens/accessibility_screen.dart';
+import 'package:cyclone/features/airport_support/presentation/screens/airport_support_screen.dart';
+
 import 'routes.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -43,9 +53,29 @@ final routerProvider = Provider<GoRouter>((ref) {
         return AppRoutes.login;
       }
 
-      if (isAuthenticated && isAuthRoute && state.matchedLocation != AppRoutes.splash) {
-        return AppRoutes.home;
+      if (isAuthenticated) {
+        final isOnboardingDone = authState.maybeWhen(
+          authenticated: (_) => authState.maybeWhen(
+                authenticated: (_) => true,
+                orElse: () => false,
+              ),
+          orElse: () => false,
+        );
+
+        // NOTE: until backend wiring exists, we still rely on local onboarding flag.
+        if (!isOnboardingDone && state.matchedLocation != AppRoutes.travelerSetup) {
+          return AppRoutes.travelerSetup;
+        }
+
+        if (isAuthRoute && state.matchedLocation != AppRoutes.splash && state.matchedLocation != AppRoutes.travelerSetup) {
+          return AppRoutes.home;
+        }
+      } else {
+        if (isAuthRoute && state.matchedLocation != AppRoutes.splash) {
+          return AppRoutes.login;
+        }
       }
+
 
       return null;
     },
@@ -124,6 +154,37 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.profile,
             builder: (context, state) => const ProfileScreen(),
           ),
+          GoRoute(
+            path: AppRoutes.services,
+            builder: (context, state) => const ServicesScreen(),
+          ),
+
+          // Services / Assistant inside shell to keep bottom nav consistent.
+
+          GoRoute(
+            path: AppRoutes.aiAssistant,
+            builder: (context, state) => const AiAssistantScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.translator,
+            builder: (context, state) => const TranslatorScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.promotions,
+            builder: (context, state) => const PromotionsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.lostAndFound,
+            builder: (context, state) => const LostAndFoundScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.accessibility,
+            builder: (context, state) => const AccessibilityScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.airportSupport,
+            builder: (context, state) => const AirportSupportScreen(),
+          ),
         ],
       ),
       GoRoute(
@@ -137,3 +198,4 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+

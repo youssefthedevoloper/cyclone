@@ -8,6 +8,9 @@ import 'package:cyclone/core/theme/app_colors.dart';
 import 'package:cyclone/widgets/cyclone_card.dart';
 import 'package:cyclone/features/authentication/presentation/providers/auth_provider.dart';
 
+import 'package:cyclone/core/config/router/routes.dart';
+
+
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -28,6 +31,16 @@ class _ProfileBody extends StatelessWidget {
   final dynamic user;
   final WidgetRef ref;
 
+  String _initialsFromName(String fullName) {
+    final parts = fullName.trim().split(RegExp(r'\s+')).where((e) => e.isNotEmpty).toList();
+    if (parts.isEmpty) return 'G';
+    if (parts.length == 1) {
+      final p = parts.first;
+      return (p.isNotEmpty ? p[0] : 'G').toUpperCase();
+    }
+    return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +54,7 @@ class _ProfileBody extends StatelessWidget {
                 radius: 50,
                 backgroundColor: AppColors.primary,
                 child: Text(
-                  user.initials,
+                  _initialsFromName((user.fullName ?? '').toString()),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 32,
@@ -90,6 +103,51 @@ class _ProfileBody extends StatelessWidget {
                     _AchievementBadge(Icons.explore, 'Explorer', true),
                     _AchievementBadge(Icons.star, 'Frequent Flyer', false),
                     _AchievementBadge(Icons.public, 'Globetrotter', false),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppConstants.spacingMd),
+              const SizedBox(height: AppConstants.spacingMd),
+              CycloneCard(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Lost & Found',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 12),
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 1.05,
+                      children: [
+                        _ActionTile(
+                          icon: Icons.report_problem_outlined,
+                          title: 'Report Lost Item',
+                          onTap: () => context.push(AppRoutes.lostAndFound),
+                        ),
+                        _ActionTile(
+                          icon: Icons.inventory_2_outlined,
+                          title: 'Found an Item',
+                          onTap: () => context.push(AppRoutes.lostAndFound),
+                        ),
+                        _ActionTile(
+                          icon: Icons.track_changes_outlined,
+                          title: 'Track Request',
+                          onTap: () => context.push(AppRoutes.lostAndFound),
+                        ),
+                        _ActionTile(
+                          icon: Icons.qr_code_scanner_outlined,
+                          title: 'Scan QR',
+                          onTap: () => context.push(AppRoutes.lostAndFound),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -152,6 +210,9 @@ class _ProfileSection extends StatelessWidget {
 
   final String title;
   final List<_ProfileItem> items;
+
+  // NOTE: we keep this widget for Traveler info blocks.
+
   final Widget? customChild;
 
   @override
@@ -194,6 +255,49 @@ class _ProfileItem {
   final String label;
   final String value;
 }
+
+class _ActionTile extends StatelessWidget {
+  const _ActionTile({required this.icon, required this.title, required this.onTap});
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: CycloneCard(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(icon, color: AppColors.primary),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 class _AchievementBadge extends StatelessWidget {
   const _AchievementBadge(this.icon, this.label, this.unlocked);
