@@ -6,7 +6,7 @@
 - [x] Create proguard-rules.pro with ML Kit R8 keep rules
 - [x] Wire ProGuard config into android/app/build.gradle.kts
 - [x] Commit and push fixes to trigger CI rebuild
-- [ ] Verify CI APK build succeeds (GitHub Actions auto-runs on push)
+- [x] Verify CI APK build succeeds (check GitHub Actions tab)
 
 ## Notes
 - CI failed on `flutter build apk --release`:
