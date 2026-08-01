@@ -1,27 +1,15 @@
-# Fix All Issues
+# CI Build Fix - APK Release
 
-## ✅ translator_screen.dart
-- [x] Remove unused imports (auth_provider, storage_service)
-- [x] Remove unused `isAuto` variable
-- [x] Fix `__` to `_` in separator builders
+## Steps
+- [x] Push all project files to GitHub
+- [x] Fix empty asset directories (add .gitkeep to assets/lottie and assets/icons)
+- [x] Create proguard-rules.pro with ML Kit R8 keep rules
+- [x] Wire ProGuard config into android/app/build.gradle.kts
+- [ ] Commit and push fixes to trigger CI rebuild
+- [ ] Verify CI APK build succeeds
 
-## ✅ profile_screen.dart
-- [x] Remove orphaned `_ProfileSection`, `_ProfileItem`, `_ActionTile`, duplicate `_AchievementBadge` classes
-- [x] Remove extra closing brace
-
-## ✅ settings_screen.dart
-- [x] Move methods back inside class, remove extra `}`
-- [x] Fix `_handleSettingChange`, `_handleNavigation`, `_showClearCacheDialog`
-
-## ✅ lost_and_found_screen.dart
-- [x] Move methods back inside class, remove extra `}`
-
-## ✅ airport_support_screen.dart
-- [x] Move methods back inside class, remove extra `}`
-
-## ✅ widget_test.dart
-- [x] Remove invalid `@override` annotations
-
-## ✅ Verify
-- [ ] Run flutter analyze
+## Notes
+- CI failed on `flutter build apk --release`:
+  - Error 1: `unable to find directory entry in pubspec.yaml: assets/lottie/` and `assets/icons/` (empty dirs not tracked by git)
+  - Error 2: R8 missing classes for `com.google.mlkit.vision.text.*` (needs keep rules)
 
