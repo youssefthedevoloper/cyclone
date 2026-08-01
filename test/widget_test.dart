@@ -17,7 +17,6 @@ import 'package:cyclone/features/authentication/data/models/auth_state.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:cyclone/core/config/router/app_router.dart';
-import 'package:cyclone/core/constants/app_constants.dart';
 
 import 'package:cyclone/core/config/router/routes.dart';
 import 'package:cyclone/core/services/secure_storage_service.dart';
@@ -40,7 +39,6 @@ class _FakeSharedPreferences implements SharedPreferences {
   @override
   List<String>? getStringList(String key) => null;
 
-  @override
   Set<String> get keys => <String>{};
 
   @override
@@ -79,10 +77,8 @@ class _FakeSharedPreferences implements SharedPreferences {
   @override
   Future<bool> clear() async => true;
 
-  @override
   Future<void> setAll(Map<String, Object> values) async {}
 
-  @override
   Object? getInstanceName() => null;
 }
 

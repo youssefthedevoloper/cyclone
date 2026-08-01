@@ -42,8 +42,13 @@ class _TravelerSetupScreenState extends ConsumerState<TravelerSetupScreen> {
 
     setState(() => _submitting = true);
     try {
-      // For now this is persisted locally until backend onboarding endpoint is wired.
-      // Requirements: airport + user info mandatory.
+      await ref.read(authProvider.notifier).updateProfile(
+        nationality: _nationalityController.text.trim(),
+        passportNumber: _passportController.text.trim().isEmpty
+            ? null
+            : _passportController.text.trim(),
+        preferredLanguage: _preferredLanguageController.text.trim(),
+      );
       await ref.read(authProvider.notifier).completeOnboarding();
       if (!mounted) return;
       context.go(AppRoutes.home);
@@ -147,4 +152,3 @@ class _TravelerSetupScreenState extends ConsumerState<TravelerSetupScreen> {
     );
   }
 }
-

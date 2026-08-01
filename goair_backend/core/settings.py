@@ -33,6 +33,9 @@ INSTALLED_APPS = [
     "apps.notifications",
     "apps.lost_found",
     "apps.settings",
+    "translator",
+    "apps.hotels",
+    "apps.taxi",
 ]
 
 MIDDLEWARE = [
@@ -125,4 +128,3 @@ SPECTACULAR_SETTINGS = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = env("CORS_ALLOW_ALL_ORIGINS", "true").lower() in {"1", "true", "yes"}
-

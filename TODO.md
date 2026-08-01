@@ -1,10 +1,27 @@
-# TODO
+# Fix All Issues
 
-## Plan to fix failing widget tests
+## ✅ translator_screen.dart
+- [x] Remove unused imports (auth_provider, storage_service)
+- [x] Remove unused `isAuto` variable
+- [x] Fix `__` to `_` in separator builders
 
-1. Fix ProviderScope missing during tests by adding a `test`-friendly `ProviderScope` in `test/widget_test.dart`.
-2. Ensure Riverpod providers used by `CycloneApp` (at least `storageServiceProvider`, `routerProvider`, `settingsProvider`, `authProvider`) have overrides in tests.
-3. Provide a fake/empty `StorageService` implementation for tests so `SettingsNotifier` can load synchronously without real `SharedPreferences`.
-4. Provide a fake `AuthNotifier`/repository or override `authProvider` to avoid network/secure-storage access during test.
-5. Re-run `flutter test` and iterate on any remaining provider/runtime errors.
+## ✅ profile_screen.dart
+- [x] Remove orphaned `_ProfileSection`, `_ProfileItem`, `_ActionTile`, duplicate `_AchievementBadge` classes
+- [x] Remove extra closing brace
+
+## ✅ settings_screen.dart
+- [x] Move methods back inside class, remove extra `}`
+- [x] Fix `_handleSettingChange`, `_handleNavigation`, `_showClearCacheDialog`
+
+## ✅ lost_and_found_screen.dart
+- [x] Move methods back inside class, remove extra `}`
+
+## ✅ airport_support_screen.dart
+- [x] Move methods back inside class, remove extra `}`
+
+## ✅ widget_test.dart
+- [x] Remove invalid `@override` annotations
+
+## ✅ Verify
+- [ ] Run flutter analyze
 

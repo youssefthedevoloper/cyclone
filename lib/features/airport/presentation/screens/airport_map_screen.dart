@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:cyclone/core/constants/app_constants.dart';
 import 'package:cyclone/core/theme/app_colors.dart';
+import 'package:cyclone/core/config/router/routes.dart' as routes;
 import 'package:cyclone/widgets/cyclone_card.dart';
 import 'package:cyclone/widgets/glass_container.dart';
 
@@ -94,7 +95,7 @@ class _AirportMapScreenState extends State<AirportMapScreen> {
                     ? IconButton(
                         icon: const Icon(Icons.navigation),
                         color: AppColors.primary,
-                        onPressed: () => context.push('/airport/navigation'),
+                        onPressed: () => context.push(routes.AppRoutes.airportNavigation),
                       )
                     : null,
               ),
@@ -212,7 +213,7 @@ class _AirportMapScreenState extends State<AirportMapScreen> {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: CycloneCard(
                     padding: const EdgeInsets.all(14),
-                    onTap: () => context.push('/airport/navigation'),
+                    onTap: () => context.push(routes.AppRoutes.airportNavigation),
                     child: Row(
                       children: [
                         Container(
@@ -357,36 +358,38 @@ class AirportNavigationScreen extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(AppConstants.spacingLg),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _NavStat(Icons.directions_walk, '3 min', 'Walking'),
-                    _NavStat(Icons.straighten, '250m', 'Distance'),
-                    _NavStat(Icons.elevator, '1', 'Elevator'),
-                  ],
-                ),
-                const SizedBox(height: AppConstants.spacingLg),
-                _NavigationStep(
-                  icon: Icons.arrow_forward,
-                  instruction: 'Head east toward Gate B area',
-                  distance: '80m',
-                ),
-                _NavigationStep(
-                  icon: Icons.elevator,
-                  instruction: 'Take elevator to Level 2',
-                  distance: '',
-                ),
-                _NavigationStep(
-                  icon: Icons.turn_right,
-                  instruction: 'Turn right at Gate B22',
-                  distance: '50m',
-                  isLast: true,
-                ),
-              ],
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(AppConstants.spacingLg),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _NavStat(Icons.directions_walk, '3 min', 'Walking'),
+                      _NavStat(Icons.straighten, '250m', 'Distance'),
+                      _NavStat(Icons.elevator, '1', 'Elevator'),
+                    ],
+                  ),
+                  const SizedBox(height: AppConstants.spacingLg),
+                  _NavigationStep(
+                    icon: Icons.arrow_forward,
+                    instruction: 'Head east toward Gate B area',
+                    distance: '80m',
+                  ),
+                  _NavigationStep(
+                    icon: Icons.elevator,
+                    instruction: 'Take elevator to Level 2',
+                    distance: '',
+                  ),
+                  _NavigationStep(
+                    icon: Icons.turn_right,
+                    instruction: 'Turn right at Gate B22',
+                    distance: '50m',
+                    isLast: true,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

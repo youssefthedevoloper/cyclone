@@ -170,11 +170,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     const SizedBox(width: AppConstants.spacingSm),
-                    Text('Remember me', style: Theme.of(context).textTheme.bodyMedium),
+                    Flexible(
+                      child: Text(
+                        'Remember me',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                     const Spacer(),
-                    TextButton(
-                      onPressed: () => context.push('/forgot-password'),
-                      child: const Text('Forgot password?'),
+                    Flexible(
+                      child: TextButton(
+                        onPressed: () => context.push('/forgot-password'),
+                        child: const Text('Forgot password?'),
+                      ),
                     ),
                   ],
                 ).animate().fadeIn(delay: 300.ms),
@@ -202,11 +210,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Don't have an account? ",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
+                    Flexible(
+                      child: Text(
+                        "Don't have an account? ",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => context.push('/register'),
@@ -215,6 +226,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                               color: AppColors.primary,
                             ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

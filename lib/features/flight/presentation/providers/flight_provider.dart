@@ -2,10 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/flight_model.dart';
 import '../../data/repositories/flight_repository.dart';
+import '../../../../core/providers.dart';
 
-final flightRepositoryProvider = Provider<FlightRepository>(
-  (ref) => FlightRepository(),
-);
+final flightRepositoryProvider = Provider<FlightRepository>((ref) {
+  return FlightRepository(apiClient: ref.watch(apiClientProvider));
+});
 
 final upcomingFlightsProvider = FutureProvider<List<FlightModel>>((ref) async {
   return ref.watch(flightRepositoryProvider).getUpcomingFlights();

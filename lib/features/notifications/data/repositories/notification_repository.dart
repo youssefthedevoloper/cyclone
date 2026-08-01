@@ -1,18 +1,68 @@
+import 'package:dio/dio.dart';
+
 import '../models/notification_model.dart';
+import '../../../../core/services/api_client.dart';
 
 class NotificationRepository {
+  NotificationRepository({ApiClient? apiClient})
+      : _apiClient = apiClient ?? ApiClient();
+
+  final ApiClient _apiClient;
+
   Future<List<NotificationModel>> getNotifications() async {
-    await Future<void>.delayed(const Duration(milliseconds: 400));
-    return _mockNotifications;
+    try {
+      final response = await _apiClient.dio.get('/notifications/');
+      final data = response.data as List<dynamic>;
+      return data
+          .map((json) => _fromJson(json as Map<String, dynamic>))
+          .toList();
+    } on DioException catch (_) {
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      return _mockNotifications;
+    }
   }
 
   Future<void> markAsRead(String id) async {
-    await Future<void>.delayed(const Duration(milliseconds: 200));
+    try {
+      await _apiClient.dio.patch('/notifications/$id/', data: {'is_read': true});
+    } on DioException catch (_) {
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+    }
   }
 
   Future<void> markAllAsRead() async {
-    await Future<void>.delayed(const Duration(milliseconds: 200));
+    try {
+      await _apiClient.dio.post('/notifications/mark-all-read/');
+    } on DioException catch (_) {
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+    }
   }
+
+  NotificationModel _fromJson(Map<String, dynamic> json) {
+    final type = _mapType(json['type'] as String? ?? 'general');
+    final data = json['data'];
+    String? flightId;
+    if (data is Map<String, dynamic>) {
+      flightId = data['flight_id'] as String?;
+    }
+    return NotificationModel(
+      id: json['id'] as String,
+      title: json['title'] as String? ?? 'Notification',
+      message: json['body'] as String? ?? '',
+      type: type,
+      timestamp: DateTime.tryParse(json['created_at'] as String? ?? '') ?? DateTime.now(),
+      isRead: json['is_read'] as bool? ?? false,
+      flightId: flightId,
+    );
+  }
+
+  NotificationType _mapType(String type) => switch (type) {
+        'delay' => NotificationType.flightDelay,
+        'gate_change' => NotificationType.gateChange,
+        'boarding' => NotificationType.boardingStarted,
+        'weather' => NotificationType.weatherAlert,
+        _ => NotificationType.announcement,
+      };
 
   static final _mockNotifications = [
     NotificationModel(

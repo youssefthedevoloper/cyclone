@@ -63,7 +63,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     ref.listen<AuthState>(authProvider, (prev, next) {
       next.whenOrNull(
-        authenticated: (_) => context.go('/home'),
+        authenticated: (_) {
+          // Registration came from loading -> authenticated, so go to traveler setup
+          final wasLoading = prev?.maybeWhen(loading: () => true, orElse: () => false) ?? false;
+          if (wasLoading) {
+            context.go('/traveler-setup');
+          } else {
+            context.go('/home');
+          }
+        },
         error: (message) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(message), backgroundColor: AppColors.error),

@@ -31,6 +31,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   final AuthRepository _repository;
+  bool _isNewRegistration = false;
+
+  bool get isNewRegistration => _isNewRegistration;
 
   Future<void> _checkAuthStatus() async {
     state = const AuthState.loading();
@@ -78,6 +81,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     String? phone,
   }) async {
     state = const AuthState.loading();
+    _isNewRegistration = true;
     try {
       final user = await _repository.register(
         email: email,
@@ -88,8 +92,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       state = AuthState.authenticated(user);
     } on Failure catch (e) {
+      _isNewRegistration = false;
       state = AuthState.error(e.message);
     } catch (e) {
+      _isNewRegistration = false;
       state = AuthState.error(e.toString());
     }
   }
@@ -127,6 +133,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     await _repository.logout();
     state = const AuthState.unauthenticated();
+  }
+
+  Future<void> updateProfile({
+    String? nationality,
+    String? passportNumber,
+    String? preferredLanguage,
+  }) async {
+    final currentState = state;
+    final user = currentState.maybeWhen(
+      authenticated: (u) => u,
+      orElse: () => null,
+    );
+    if (user == null) return;
+
+    final updatedUser = user.copyWith(
+      nationality: nationality ?? user.nationality,
+      passportNumber: passportNumber ?? user.passportNumber,
+      preferredLanguage: preferredLanguage ?? user.preferredLanguage,
+    );
+
+    await _repository.saveUserData(updatedUser);
+    state = AuthState.authenticated(updatedUser);
   }
 
   Future<bool> authenticateWithBiometric() async {

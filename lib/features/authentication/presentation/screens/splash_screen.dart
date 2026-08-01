@@ -88,6 +88,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.textSecondary,
                   ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ).animate(controller: _controller).fadeIn(delay: 400.ms),
             const SizedBox(height: AppConstants.spacing2xl),
             SizedBox(

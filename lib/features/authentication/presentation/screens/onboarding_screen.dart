@@ -102,40 +102,57 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppConstants.spacingXl,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: page.color.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(page.icon, size: 56, color: page.color),
-                        )
-                            .animate(key: ValueKey(index))
-                            .fadeIn(duration: 400.ms)
-                            .scale(
-                              begin: const Offset(0.5, 0.5),
-                              curve: Curves.easeOutBack,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight,
                             ),
-                        const SizedBox(height: AppConstants.spacing2xl),
-                        Text(
-                          page.title,
-                          style: Theme.of(context).textTheme.displayMedium,
-                          textAlign: TextAlign.center,
-                        ).animate(key: ValueKey('title_$index')).fadeIn(delay: 100.ms),
-                        const SizedBox(height: AppConstants.spacingMd),
-                        Text(
-                          page.description,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.textSecondary,
-                                height: 1.6,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      color: page.color.withValues(alpha: 0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(page.icon, size: 56, color: page.color),
+                                  )
+                                      .animate(key: ValueKey(index))
+                                      .fadeIn(duration: 400.ms)
+                                      .scale(
+                                        begin: const Offset(0.5, 0.5),
+                                        curve: Curves.easeOutBack,
+                                      ),
+                                  const SizedBox(height: AppConstants.spacing2xl),
+                                  Text(
+                                    page.title,
+                                    style: Theme.of(context).textTheme.displayMedium,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ).animate(key: ValueKey('title_$index')).fadeIn(delay: 100.ms),
+                                  const SizedBox(height: AppConstants.spacingMd),
+                                  Text(
+                                    page.description,
+                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                          color: AppColors.textSecondary,
+                                          height: 1.6,
+                                        ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 4,
+                                    overflow: TextOverflow.ellipsis,
+                                  ).animate(key: ValueKey('desc_$index')).fadeIn(delay: 200.ms),
+                                ],
                               ),
-                          textAlign: TextAlign.center,
-                        ).animate(key: ValueKey('desc_$index')).fadeIn(delay: 200.ms),
-                      ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },

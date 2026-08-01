@@ -20,5 +20,7 @@ urlpatterns = [
     path("api/", include("apps.notifications.urls")),
     path("api/", include("apps.lost_found.urls")),
     path("api/", include("apps.settings.urls")),
-]
 
+    # Translator
+    path("api/", include("translator.urls")),
+]

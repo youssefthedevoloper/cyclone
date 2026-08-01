@@ -7,6 +7,7 @@ import 'core/constants/app_constants.dart';
 import 'core/services/storage_service.dart';
 import 'core/theme/app_theme.dart';
 import 'features/authentication/presentation/providers/auth_provider.dart';
+import 'l10n/generated/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,9 @@ class CycloneApp extends ConsumerWidget {
     return MaterialApp.router(
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
+      locale: Locale(settings.language),
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: AppTheme.light(textScale: settings.textScale),
       darkTheme: AppTheme.dark(textScale: settings.textScale),
       themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,

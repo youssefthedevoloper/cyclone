@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'app_colors.dart';
@@ -31,7 +32,7 @@ abstract final class AppTheme {
         backgroundColor: AppColors.background,
         foregroundColor: AppColors.textPrimary,
         centerTitle: false,
-        titleTextStyle: textTheme.titleLarge,
+        titleTextStyle: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       cardTheme: CardThemeData(
@@ -41,6 +42,12 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(24),
         ),
         margin: EdgeInsets.zero,
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -75,7 +82,7 @@ abstract final class AppTheme {
         ),
       ),
       dividerTheme: const DividerThemeData(
-        color: AppColors.border,
+        color: AppColors.divider,
         thickness: 1,
       ),
       splashFactory: InkRipple.splashFactory,
@@ -105,7 +112,7 @@ abstract final class AppTheme {
         backgroundColor: AppColors.darkBackground,
         foregroundColor: AppColors.darkTextPrimary,
         centerTitle: false,
-        titleTextStyle: textTheme.titleLarge,
+        titleTextStyle: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       cardTheme: CardThemeData(
@@ -116,17 +123,23 @@ abstract final class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.darkSurface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.darkTextSecondary.withValues(alpha: 0.3)),
+          borderSide: BorderSide(color: AppColors.darkBorder.withValues(alpha: 0.5)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.darkTextSecondary.withValues(alpha: 0.3)),
+          borderSide: BorderSide(color: AppColors.darkBorder.withValues(alpha: 0.5)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -135,7 +148,7 @@ abstract final class AppTheme {
         hintStyle: textTheme.bodyMedium?.copyWith(color: AppColors.darkTextSecondary),
       ),
       dividerTheme: DividerThemeData(
-        color: AppColors.darkTextSecondary.withValues(alpha: 0.2),
+        color: AppColors.darkBorder.withValues(alpha: 0.5),
         thickness: 1,
       ),
     );

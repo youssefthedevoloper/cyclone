@@ -129,6 +129,24 @@ class AuthRepository {
     }
   }
 
+  Future<void> saveUserData(UserModel user) async {
+    await _secureStorage.write(
+      'user_data',
+      jsonEncode({
+        'id': user.id,
+        'email': user.email,
+        'firstName': user.firstName,
+        'lastName': user.lastName,
+        'phone': user.phone,
+        'avatarUrl': user.avatarUrl,
+        'nationality': user.nationality,
+        'passportNumber': user.passportNumber,
+        'preferredLanguage': user.preferredLanguage,
+        'biometricEnabled': user.biometricEnabled,
+      }),
+    );
+  }
+
   Future<void> logout() async {
     await _secureStorage.delete(AppConstants.authTokenKey);
     await _secureStorage.delete(AppConstants.refreshTokenKey);
