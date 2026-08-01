@@ -33,11 +33,15 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build release APK
-        run: flutter build apk --release
+      # Split per ABI so each APK only contains one architecture's native
+      # libs. This keeps each APK ~25-35MB (well under 50MB) while still
+      # bundling all ML Kit languages.
+      - name: Build release APKs (split per ABI)
+        run: flutter build apk --release --split-per-abi
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: error

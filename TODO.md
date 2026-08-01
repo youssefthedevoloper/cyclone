@@ -9,7 +9,10 @@
 - [x] Reduce Gradle JVM heap in android/gradle.properties to fit GitHub Actions 7GB runners
 - [x] Add -dontwarn for com.google.mlkit.vision.text.** to proguard-rules.pro
 - [x] Add actions/setup-java (Temurin 17) to android-apk.yml workflow
+- [x] Restore all ML Kit language modules (keep Chinese/Japanese/Korean/Devanagari)
+- [x] Switch CI to split-per-ABI build so each APK is ~25-35MB (under 50MB) while keeping all languages
 - [x] Commit and push fixes to trigger CI rebuild (commit 42029c2)
+- [x] Update TODO with CI fix progress (commit 2470da4)
 - [ ] Verify CI APK build succeeds (check GitHub Actions tab)
 
 ## Notes
