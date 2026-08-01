@@ -40,6 +40,15 @@ android {
             )
         }
     }
+
+    packaging {
+        jniLibs {
+            // Store native libraries COMPRESSED inside the APK instead of raw.
+            // This shrinks the APK substantially (native libs are the bulk of
+            // the size) while the OS still extracts them at install time.
+            useLegacyPackaging = true
+        }
+    }
 }
 
 kotlin {
@@ -49,16 +58,15 @@ kotlin {
 }
 
 dependencies {
-    // ML Kit Text Recognition — base + all language modules.
-    // The google_mlkit_text_recognition plugin only declares the language
-    // modules as compileOnly, but its Java code imports/instantiates them
-    // directly, so they are added here as implementation dependencies to
-    // prevent R8 missing-class errors during minifyReleaseWithR8.
+    // ML Kit Text Recognition — base (Latin) module.
+    //
+    // The app creates `TextRecognizer()` with NO script argument, which uses
+    // the default LATIN recognizer. The plugin's Java code also references the
+    // optional Chinese/Devanagari/Japanese/Korean modules via compileOnly, but
+    // those modules are NOT needed by this app and each bundles huge ML models
+    // (that is what pushed the APK to ~94MB). proguard-rules.pro keeps the
+    // referenced classes with `-dontwarn` so R8 does not fail on them.
     implementation("com.google.mlkit:text-recognition:16.0.1")
-    implementation("com.google.mlkit:text-recognition-chinese:16.0.1")
-    implementation("com.google.mlkit:text-recognition-devanagari:16.0.1")
-    implementation("com.google.mlkit:text-recognition-japanese:16.0.1")
-    implementation("com.google.mlkit:text-recognition-korean:16.0.1")
 }
 
 flutter {

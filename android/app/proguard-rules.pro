@@ -1,11 +1,10 @@
 # Cyclone - ProGuard / R8 keep rules
 
-# google_mlkit_text_recognition - keep ML Kit text recognizer classes
+# google_mlkit_text_recognition - keep ML Kit text recognizer classes.
+# Only the base (Latin) module is bundled; the Chinese/Devanagari/Japanese/
+# Korean modules are NOT included (the app never selects those scripts), so
+# keep only the base package and Latin sub-package.
 -keep class com.google.mlkit.vision.text.** { *; }
--keep class com.google.mlkit.vision.text.chinese.** { *; }
--keep class com.google.mlkit.vision.text.devanagari.** { *; }
--keep class com.google.mlkit.vision.text.japanese.** { *; }
--keep class com.google.mlkit.vision.text.korean.** { *; }
 -keep class com.google.mlkit.vision.text.latin.** { *; }
 
 # google_mlkit_commons

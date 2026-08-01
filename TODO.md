@@ -10,7 +10,9 @@
 - [x] Add -dontwarn for com.google.mlkit.vision.text.** to proguard-rules.pro
 - [x] Add actions/setup-java (Temurin 17) to android-apk.yml workflow
 - [x] Restore all ML Kit language modules (keep Chinese/Japanese/Korean/Devanagari)
-- [x] Switch CI to build a single arm64-v8a APK (~30-35MB, under 50MB) that installs correctly on modern phones while keeping all languages
+- [x] Switch CI to build a single normal universal APK that installs on all devices
+- [x] Remove unused ML Kit language modules (app only uses default Latin recognizer) to get under 50MB
+- [x] Compress native libs (useLegacyPackaging) to shrink the universal APK further
 - [x] Commit and push fixes to trigger CI rebuild (commit 42029c2)
 - [x] Update TODO with CI fix progress (commit 2470da4)
 - [ ] Verify CI APK build succeeds (check GitHub Actions tab)
