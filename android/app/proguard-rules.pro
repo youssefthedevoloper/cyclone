@@ -18,6 +18,10 @@
 -keep class com.google_mlkit_text_recognition.** { *; }
 -keep class com.google_mlkit_commons.** { *; }
 
+# Suppress missing-class warnings for ML Kit optional language modules at
+# shrink time. The classes are present via implementation dependencies.
+-dontwarn com.google.mlkit.vision.text.**
+
 # Keep generic signatures and inner classes for ML Kit
 -keepattributes Signature
 -keepattributes InnerClasses,EnclosingMethod

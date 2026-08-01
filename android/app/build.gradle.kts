@@ -48,6 +48,19 @@ kotlin {
     }
 }
 
+dependencies {
+    // ML Kit Text Recognition language modules.
+    // The google_mlkit_text_recognition plugin only declares these as
+    // compileOnly, but its code imports/instantiates them directly. Adding
+    // them as implementation dependencies prevents R8 missing-class errors
+    // during minifyReleaseWithR8.
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+    implementation("com.google.mlkit:text-recognition-chinese:16.0.1")
+    implementation("com.google.mlkit:text-recognition-devanagari:16.0.1")
+    implementation("com.google.mlkit:text-recognition-japanese:16.0.1")
+    implementation("com.google.mlkit:text-recognition-korean:16.0.1")
+}
+
 flutter {
     source = "../.."
 }
