@@ -2,8 +2,12 @@
     <!-- Camera and Text Recognition Permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!-- Camera is OPTIONAL so the app installs on ALL devices (required=false
+         means no device is blocked from installing even without a camera).
+         The CAMERA permission above is still granted at runtime only when the
+         app actually needs it. -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     
     <application
         android:label="cyclone"

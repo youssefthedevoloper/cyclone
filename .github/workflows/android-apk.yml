@@ -1,12 +1,15 @@
-name: Android APK  cyclone
+name: Build Android APK
 
 on:
   push:
     branches:
-      - "**"
+      - main
+      - master
+  workflow_dispatch: {}
 
 jobs:
   build-apk:
+    name: Build universal release APK
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,8 +24,9 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.44.6"
           channel: "stable"
+          flutter-version: "3.44.6"
+          cache: true
 
       - name: Flutter doctor
         run: flutter doctor -v
@@ -30,16 +34,44 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Run tests
         run: flutter test
 
-      # Build ONE normal universal APK (all ABIs). It installs on every
-      # Android device with no user-side choices. Only the base ML Kit
-      # text-recognition (Latin) module is bundled — the unused language
-      # modules were removed so the universal APK fits under 50MB, and native
-      # libs are stored compressed (useLegacyPackaging) to shrink it further.
+      # Build ONE universal APK (all ABIs: arm64-v8a, armeabi-v7a, x86_64).
+      # No --split-per-abi, no --target-platform → installs on ALL Android
+      # devices. Native libs are stored compressed (useLegacyPackaging) to keep
+      # it under 50MB while ML Kit language modules are stripped (Latin only).
       - name: Build release APK
         run: flutter build apk --release
+
+      # Verify the universal APK actually contains ALL ABIs and check its size,
+      # so we never accidentally ship an arm64-only or oversized APK again.
+      - name: Inspect APK (ABIs + size)
+        shell: bash
+        run: |
+          set -e
+          APK="build/app/outputs/flutter-apk/app-release.apk"
+          echo "=== APK size ==="
+          ls -lh "$APK" | awk '{print $5, $9}'
+          SZ_MB=$(du -m "$APK" | cut -f1)
+          echo "Size: ${SZ_MB} MB"
+          if [ "$SZ_MB" -gt 50 ]; then
+            echo "::error::APK is ${SZ_MB}MB (>50MB) — too large for universal single APK"
+            exit 1
+          fi
+          echo "=== ABIs inside APK ==="
+          unzip -l "$APK" | grep -oE "lib/[^/]+/libflutter.so" | sort -u
+          unzip -l "$APK" | grep -oE "lib/[^/]+/" | sort -u
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -47,3 +79,4 @@ jobs:
           name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
+
