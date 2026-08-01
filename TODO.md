@@ -5,8 +5,8 @@
 - [x] Fix empty asset directories (add .gitkeep to assets/lottie and assets/icons)
 - [x] Create proguard-rules.pro with ML Kit R8 keep rules
 - [x] Wire ProGuard config into android/app/build.gradle.kts
-- [ ] Commit and push fixes to trigger CI rebuild
-- [ ] Verify CI APK build succeeds
+- [x] Commit and push fixes to trigger CI rebuild
+- [ ] Verify CI APK build succeeds (GitHub Actions auto-runs on push)
 
 ## Notes
 - CI failed on `flutter build apk --release`:
