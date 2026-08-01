@@ -9,7 +9,7 @@
 - [x] Reduce Gradle JVM heap in android/gradle.properties to fit GitHub Actions 7GB runners
 - [x] Add -dontwarn for com.google.mlkit.vision.text.** to proguard-rules.pro
 - [x] Add actions/setup-java (Temurin 17) to android-apk.yml workflow
-- [ ] Commit and push fixes to trigger CI rebuild
+- [x] Commit and push fixes to trigger CI rebuild (commit 42029c2)
 - [ ] Verify CI APK build succeeds (check GitHub Actions tab)
 
 ## Notes
